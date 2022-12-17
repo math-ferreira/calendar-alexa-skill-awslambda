@@ -1,0 +1,24 @@
+{
+  "name": "helloworld",
+  "version": "1.0.0",
+  "description": "helloworld application that responds when user say 'hi' to alexa.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Alexa",
+    "Alexa",
+    "Skill",
+    "Conversational",
+    "UI"
+  ],
+  "author": "renjith",
+  "license": "ISC",
+  "dependencies": {
+    "ask-sdk": "^2.7.0"
+  },
+  "devDependencies": {
+    "alexa-skill-test-framework": "^1.2.4"
+  }
+}
