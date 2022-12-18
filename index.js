@@ -1,14 +1,14 @@
 'use strict';
 const Alexa = require('ask-sdk-core');
-
-
+const { GetCalendarsIntent, HelloWorldIntentHandler } = require('./intents/intents');
+//const { HelloWorldIntentHandler } = require('./intents/intents');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'Welcome to the Alexa Skills Kit, you can say hello?';
+    const speechText = 'Welcome to your custom Google Calendar. What do you want?';
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
@@ -17,36 +17,9 @@ const LaunchRequestHandler = {
   }
 }
 
-const HelloWorldIntentHandler = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest' && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
-  },
-  handle(handlerInput) {
-    const speechText = 'Hello World!';
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard('Hello World!', speechText)
-      .getResponse();
-  }
-};
-
-
-const MatheusTestdIntent = {
-  canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest' && handlerInput.requestEnvelope.request.intent.name === 'MatheusTestdIntent';
-  },
-  handle(handlerInput) {
-    const speechText = 'Hello maysa, how are you? Great weekend!';
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard('Hello World!', speechText)
-      .getResponse();
-  }
-};
-
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
-    HelloWorldIntentHandler,
-    MatheusTestdIntent
+    GetCalendarsIntent,
+    HelloWorldIntentHandler
   ).lambda();

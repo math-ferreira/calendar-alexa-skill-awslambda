@@ -1,7 +1,7 @@
 {
-  "name": "helloworld",
+  "name": "calendar-alexa-skill-awslambda",
   "version": "1.0.0",
-  "description": "helloworld application that responds when user say 'hi' to alexa.",
+  "description": "app to create a custom skill to integrate with google calendar backend program.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
