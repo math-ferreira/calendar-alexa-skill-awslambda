@@ -1,0 +1,23 @@
+{
+    "_comment": "use this file to put your properties and credentials needed for this custom skill",
+    "data": {
+        "calendar_alexa_service": {
+            "api_username": "",
+            "api_password": "",
+            "api_hostname": "",
+            "api_port": "",
+            "get_calendars_path": "",
+            "get_calendar_by_id_path": "",
+            "create_event_path": ""
+        },
+        "intents": {
+            "hello_world": "HelloWorldIntent",
+            "get_calendars": "GetCalendarsIntent",
+            "get_calendar_by_id": "GetCalendarByIdIntent",
+            "create_event": "CreateEventIntent"
+        },
+        "calendars": {
+            "principal": ""
+        }
+    }
+}
