@@ -1,7 +1,6 @@
 'use strict';
 const Alexa = require('ask-sdk-core');
-const { GetCalendarsIntent, HelloWorldIntentHandler } = require('./intents/intents');
-//const { HelloWorldIntentHandler } = require('./intents/intents');
+const { GetCalendarsIntent, HelloWorldIntentHandler, GetCalendarByIdIntent } = require('./intents/intents');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -15,11 +14,12 @@ const LaunchRequestHandler = {
       .withSimpleCard('Hello User', speechText)
       .getResponse();
   }
-}
+};
 
 exports.handler = Alexa.SkillBuilders.custom()
   .addRequestHandlers(
     LaunchRequestHandler,
     GetCalendarsIntent,
+    GetCalendarByIdIntent,
     HelloWorldIntentHandler
   ).lambda();

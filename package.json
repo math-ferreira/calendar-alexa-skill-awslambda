@@ -16,7 +16,7 @@
   "author": "renjith",
   "license": "ISC",
   "dependencies": {
-    "ask-sdk": "^2.7.0"
+    "ask-sdk": "^2.12.1"
   },
   "devDependencies": {
     "alexa-skill-test-framework": "^1.2.4"

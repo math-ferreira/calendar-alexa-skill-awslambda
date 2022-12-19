@@ -1,15 +1,19 @@
 "use strict";
 
-const { GetCalendarsIntentObject } = require("./get-calendar-intent");
-
+const { build: buildGetCalendars } = require("./get-calendars-intent");
+const { build: buildGetCalendarById } = require("./get-calendar-by-id-intent");
 const CONFIG = require("../config.json").data;
+const Alexa = require('ask-sdk-core');
 
 const HelloWorldIntentHandler = {
   canHandle(handlerInput) {
-    return handlerInput.requestEnvelope.request.type === 'IntentRequest' && handlerInput.requestEnvelope.request.intent.name === CONFIG.intents.heelo_world;
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' && handlerInput.requestEnvelope.request.intent.name === CONFIG.intents.hello_world;
   },
   handle(handlerInput) {
-    const speechText = 'Hello World!';
+
+    const name = Alexa.getSlotValue(handlerInput.requestEnvelope, 'name')
+    const speechText = name ? `Hello ${name}, nice to meet you!` : "Hello world!";
+
     return handlerInput.responseBuilder
       .speak(speechText)
       .withSimpleCard('Hello World!', speechText)
@@ -17,35 +21,40 @@ const HelloWorldIntentHandler = {
   }
 };
 
-
 const GetCalendarsIntent = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest' && handlerInput.requestEnvelope.request.intent.name === CONFIG.intents.get_calendars;
   },
   async handle(handlerInput) {
 
-    var response = new GetCalendarsIntentObject().build()
+    var result = await buildGetCalendars()
 
     return handlerInput.responseBuilder
-      .speak(response)
+      .speak(result)
       .withSimpleCard('Hello!', result)
       .getResponse();
   }
 };
 
-var buildOptions = function (path, method) {
-  var serviceConfig = CONFIG.calendar_alexa_service
-  return options = {
-    host: serviceConfig.api_hostname,
-    port: serviceConfig.api_port,
-    path: path,
-    method: method,
-    auth: `${serviceConfig.api_username}:${serviceConfig.api_password}`,
-  };
-}
+const GetCalendarByIdIntent = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' && handlerInput.requestEnvelope.request.intent.name === CONFIG.intents.get_calendar_by_id;
+  },
+  async handle(handlerInput) {
+    
+    const calendarId = Alexa.getSlotValue(handlerInput.requestEnvelope, 'calendarId')
+    const result = await buildGetCalendarById(calendarId)
+    
+    return handlerInput.responseBuilder
+      .speak(result)
+      .withSimpleCard('Hello!', result)
+      .getResponse();
+  }
+};
+
 
 module.exports = {
-  buildOptions,
   HelloWorldIntentHandler,
-  GetCalendarsIntent
+  GetCalendarsIntent,
+  GetCalendarByIdIntent
 };
