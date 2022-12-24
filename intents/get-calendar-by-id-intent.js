@@ -36,8 +36,14 @@ const getCalendarRequest = (calendarId) => {
 }
 
 const createResponse = function (response) {
-    const calendarDetails = `Summary: ${response.summary} and time zone: ${response.time_zone}`
-    return `Here is the some details of your calendar: ${response.calendar_id}. ${calendarDetails}.`
+    var calendarDetails = ""
+    if (response.summary == undefined) {
+        calendarDetails = "There is no calendar with this name, please make sure you are correct and try again."
+    } else {
+        calendarDetails = `Here is the some details of your calendar. Summary: ${response.summary} and time zone: ${response.time_zone}`
+    }
+
+    return calendarDetails
 };
 
 const buildOptions = function (calendarId) {
