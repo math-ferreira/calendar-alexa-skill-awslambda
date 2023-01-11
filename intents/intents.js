@@ -2,6 +2,7 @@
 
 const { build: buildGetCalendars } = require("./get-calendars-intent");
 const { build: buildGetCalendarById } = require("./get-calendar-by-id-intent");
+const { build: buildCreateEvent } = require("./create-event-intent");
 const CONFIG = require("../config.json").data;
 const Alexa = require('ask-sdk-core');
 
@@ -53,8 +54,30 @@ const GetCalendarByIdIntent = {
 };
 
 
+const CreateEventIntent = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' && handlerInput.requestEnvelope.request.intent.name === CONFIG.intents.create_event;
+  },
+ async handle(handlerInput) {
+      const {requestEnvelope, responseBuilder} = handlerInput;
+      
+      let speakOutput = await buildCreateEvent(requestEnvelope)
+      console.log('TESTSTSTSTSTSTSTTSTSTTSS  1111111111111')
+      console.log(speakOutput)
+      console.log('TESTSTSTSTSTSTSTTSTSTT    22222222222222')
+
+      return handlerInput.responseBuilder
+          .speak(speakOutput)
+          .getResponse();
+  }
+};
+
+
+
+
 module.exports = {
   HelloWorldIntentHandler,
   GetCalendarsIntent,
-  GetCalendarByIdIntent
+  GetCalendarByIdIntent,
+  CreateEventIntent
 };
