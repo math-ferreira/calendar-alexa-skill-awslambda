@@ -16,6 +16,28 @@
             "get_calendar_by_id": "GetCalendarByIdIntent",
             "create_event": "CreateEventIntent"
         },
+        "attendees": [
+            {
+                "name": "wife",
+                "email": ""
+            },
+            {
+                "name": "sister",
+                "email": ""
+            },
+            {
+                "name": "brother-in-law",
+                "email": ""
+            },             
+            {
+                "name": "mother",
+                "email": ""
+            },
+            {
+                "name": "father",
+                "email": ""
+            },            
+        ],        
         "calendars": {
             "principal": ""
         }
