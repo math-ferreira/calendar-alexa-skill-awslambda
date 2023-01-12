@@ -6,15 +6,16 @@ const CONFIG = require("../config.json").data;
 
 async function build(requestEnvelope) {
     var dialogueObject = createDialogueObject(requestEnvelope)
-    var response = await postEventRequest()
-    return createResponse(dialogueObject)
+    var response = await postEventRequest(dialogueObject)
+    return createResponse(response)
 }
 
 const postEventRequest = (dialogueObject) => {
     var serviceConfig = CONFIG.calendar_alexa_service
     console.log(`Starting to create Google event called ${dialogueObject.summary} from ${serviceConfig.api_hostname}`);
 
-    var request = createRequest(dialogueObject)
+    var eventRequestBody = createRequest(dialogueObject)
+    const dataString = JSON.stringify(eventRequestBody)
 
     return new Promise(resolve => {
 
@@ -61,55 +62,73 @@ const createDialogueObject = (requestEnvelope) => {
 const createRequest = (dialogueObject) => {
 
     var possibleAtteendesList = Object
-
-    for (var possibleAtteende in CONFIG.attendees) {
-        if (possibleAtteende.name == dialogueObject.attendees) {
-            possibleAtteendesList = possibleAtteende
+    for (var i in CONFIG.attendees) {
+        if (CONFIG.attendees[i].name == dialogueObject.attendees) {
+            possibleAtteendesList = CONFIG.attendees[i]
         }
-        console.log(val.path);
     }
 
-    return {
-        "send_updates": true,
-        "attendees": [
-            {
-                "display_name": possibleAtteendesList.name,
-                "email": possibleAtteendesList.email,
-                "is_optional": false,
-                "response_status": "needsAction"
-            }
-        ],
-        "color_id": "8",
-        "event_type": "DEFAULT",
-        "start_date": "2022-12-12T16:09:53-03:00",
-        "end_date": "2022-12-12T18:09:53-03:00",
-        "location": dialogueObject.location,
-        "summary": dialogueObject.summary
+    if (possibleAtteendesList != Object) {
+        return {
+            "send_updates": true,
+            "attendees": [
+                {
+                    "display_name": possibleAtteendesList.name,
+                    "email": possibleAtteendesList.email,
+                    "is_optional": false,
+                    "response_status": "needsAction"
+                }
+            ],
+            "color_id": "8",
+            "description": "",
+            "event_type": "DEFAULT",
+            "start_date": createDateTime(dialogueObject.startDate, dialogueObject.startTime),
+            "end_date": createDateTime(dialogueObject.endDate, dialogueObject.endTime),
+            "location": dialogueObject.location,
+            "summary": dialogueObject.summary
+        }
+    } else {
+        return {
+            "send_updates": true,
+            "attendees": [],
+            "color_id": "8",
+            "description": "",
+            "event_type": "DEFAULT",
+            "start_date": createDateTime(dialogueObject.startDate, dialogueObject.startTime),
+            "end_date": createDateTime(dialogueObject.endDate, dialogueObject.endTime),
+            "location": dialogueObject.location,
+            "summary": dialogueObject.summary
+        }
     }
 
 }
 
-const createResponse = function (response) {
+const createDateTime = (date, time) => {
+    return `${date}T${time}:00-03:00`
+}
 
-    // var summaryList = response.map(function (element) {
-    //     return `${element.summary}`
-    // }).join(', ')
+const createResponse = async function (response) {
 
-    // return `Okay, here are your calendars from Google. Today, you have ${response.length} kind of calendars created. And here is the list of them: ${summaryList}".`
+    var speakOut = `Great, All right. I created the event called ${response.summary} to ${response.start_event.date}`
 
-    return `Okay Matheus, your attendees is ${response.attendees} and location is ${response.location}`
+    if (response.attendees != null) {
+        speakOut += ` and I sent to your ${response.attendees[0].display_name}`
+    }
+
+    return speakOut
 };
 
 
-const buildOptions = function (eventRequestBody) {
+const buildOptions = function () {
     var serviceConfig = CONFIG.calendar_alexa_service
     return {
         host: serviceConfig.api_hostname,
         port: serviceConfig.api_port,
-        path: serviceConfig.create_event_path,
+        path: `${serviceConfig.create_event_path}/${CONFIG.calendars.principal}`,
         method: "POST",
-        json: true,
-        body: eventRequestBody,
+        headers: {
+            'Content-Type': 'application/json'
+        },
         auth: `${serviceConfig.api_username}:${serviceConfig.api_password}`,
     };
 };

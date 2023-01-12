@@ -62,9 +62,8 @@ const CreateEventIntent = {
       const {requestEnvelope, responseBuilder} = handlerInput;
       
       let speakOutput = await buildCreateEvent(requestEnvelope)
-      console.log('TESTSTSTSTSTSTSTTSTSTTSS  1111111111111')
+      
       console.log(speakOutput)
-      console.log('TESTSTSTSTSTSTSTTSTSTT    22222222222222')
 
       return handlerInput.responseBuilder
           .speak(speakOutput)
